@@ -13,9 +13,9 @@ if __name__=="__main__":
         data = json.load(json_file)
 
     participants = data["participants"].keys()
-    excludes = data["excludes"].keys()
+    excludes = data["excludes"]
 
-    bons_amics = bon_amic(participants)
+    bons_amics = bon_amic(participants, excludes)
 
     for give, recieve in bons_amics.items():
         print give + " give to " + recieve

@@ -37,25 +37,34 @@ def bon_amic(participants, excludes=None):
         retry = False
 
         bonamics = {}
-        remaining_participants = list(participants)
+        candidates = list(participants)
 
         for participant in participants:
-            participant_was_in_list = participant in remaining_participants
+            participant_was_in_candidate_list = participant in candidates
 
-            if participant_was_in_list:
-                remaining_participants.remove(participant)
+            if participant_was_in_candidate_list:
+                candidates.remove(participant)
 
-            if remaining_participants == []:
+            excluded_candidates = []
+            if participant in excludes: # Participant has excludes (no is excluded!)
+                for exclude in excludes[participant]:
+                    if exclude in candidates:
+                        candidates.remove(exclude)
+                        excluded_candidates.append(exclude)
+
+            if candidates == []:
                 # participant was the only one in the list. Fuck!
                 retry = True
                 break
 
-            bonamic = rand_choice(remaining_participants)
+            bonamic = rand_choice(candidates)
             bonamics[participant] = bonamic
 
-            remaining_participants.remove(bonamic)
+            candidates.remove(bonamic)
 
-            if participant_was_in_list:
-                remaining_participants.append(participant)
+            if participant_was_in_candidate_list:
+                candidates.append(participant)
+
+            candidates.extend(excluded_candidates)
 
     return bonamics
